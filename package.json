@@ -1,0 +1,22 @@
+{
+  "name": "inverted-index",
+  "version": "1.0.0",
+  "description": "An application that implements an inverted index",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela-rbabalola/Inverted-Index.git"
+  },
+  "keywords": [
+    "search"
+  ],
+  "author": "Rotimi Babalola",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andela-rbabalola/Inverted-Index/issues"
+  },
+  "homepage": "https://github.com/andela-rbabalola/Inverted-Index#readme"
+}
