@@ -4,6 +4,7 @@
   "description": "An application that implements an inverted index",
   "main": "index.js",
   "scripts": {
+    "start": "node node_modules/gulp-cli/bin/gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +19,14 @@
   "bugs": {
     "url": "https://github.com/andela-rbabalola/Inverted-Index/issues"
   },
-  "homepage": "https://github.com/andela-rbabalola/Inverted-Index#readme"
+  "homepage": "https://github.com/andela-rbabalola/Inverted-Index#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.6",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "gulp-cli": "^1.2.2"
+  }
 }
