@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node node_modules/gulp-cli/bin/gulp",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node node_modules/grunt-cli/bin/grunt test",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "repository": {
