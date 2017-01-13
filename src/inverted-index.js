@@ -1,17 +1,3 @@
-function getTokens(text){
-	//remove punctuations and other characters
-	let cleanText = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
-	                    //remove excess whitespace
-	                    .replace(/\s{2,}/g," ")
-	                    //convert to lower case
-	                    .toLowerCase()
-	                    //split into words
-	                    .split(' ')
-	                    //sort
-	                    .sort();
-	return(cleanText);
-}
-
 class InvertedIndex{
 	constructor(){
 		//Object to store the index
@@ -19,10 +5,9 @@ class InvertedIndex{
 	}
 
 	/*
-	* Function to separate a string into words
-	* Non-alphanumeric characters are removed 
-	* The text is converted to lower case and sorted
-	*/
+     * @param{String} text - Words to get tokens from
+     * @preturn{Array} cleanText - An array of sorted strings without non-alphanumeric symbols
+     **/
 	static clean(text){
 		let cleanText = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
 		 					.replace(/\s{2,}/g, " ")
@@ -33,43 +18,54 @@ class InvertedIndex{
 	}
 
 	/*
-	* Function to remove duplicate words
-	* from an array of strings
+	* @param{Array} words - An array of strings 
+	* @param{Array} uniqueWords - An array non-duplicate strings
 	*/
 
 	static removeDuplicates(words){
+		//first separate strings into words
+		//let tokens = InvertedIndex.clean(words);
 		let uniqueWords = words.filter((item, index) => words.indexOf(item) === index);
 		return(uniqueWords);
 	}
 
+	/*
+	* @param{Array} docToIndex - A JSON array of text objects to index
+	* @return{Object} index - An object that maps words to locations
+	**/
+
 	getIndex(docToIndex){
+		const allWords = [];
 		const index = {};
+		const fileLength = docToIndex.length;
+		if(fileLength === 0){
+			return 'JSON file must non-empty';
+		}
 
 		docToIndex.forEach((document, docIndex) => {
-			let cleanWords = InvertedIndex.clean(document.text);
-			//remove duplicates from words
-			let uniqueWords = InvertedIndex.removeDuplicates(cleanWords);
-
-			//loop again on each word in clean words
-			uniqueWords.forEach((word) => {
-			/*if word is not a key in the index create it as a key
-			* assign it an empty array
-			*/
-
-		    if(Object.keys(index).indexOf(word) === -1){
-			    index[word] = [];
-			    index[word].push(docIndex + 1);
-		    } else{
-			    index[word].push(docIndex + 1);
-		    }
+			allWords.push(`${document.title.toLowerCase()} ${document.text
+            .toLowerCase()}`);
 		});
-	});
+		const tokens = InvertedIndex.clean(allWords.join(' '));
+		const uniqueWords = InvertedIndex.removeDuplicates(tokens);
+		//loop over unique words and create the index
+		uniqueWords.forEach((word) => {
+			index[word] = [];
+			allWords.forEach((document, docIndex)=>{
+				//if word is not a key in the Object create it
+				if(document.indexOf(word) > -1){
+					index[word].push(docIndex + 1);
+				}
+		  });
+	    });
 		this.index = index;
 		return index;
-   }
+	}
 
    /*
-   * Function to search the index for a given word
+   * @param{String} terms - Search query
+   * @param{Object} invIndex - Index to perform search on
+   * @return{Object} results - Object that maps terms in search query to documents 
    */
    searchIndex(terms, invIndex){
    	let results = {};
@@ -86,3 +82,5 @@ class InvertedIndex{
    	return(results);
    }
 }
+
+

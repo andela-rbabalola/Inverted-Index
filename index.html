@@ -14,6 +14,8 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -32,7 +34,7 @@
     <![endif]-->
   </head>
 
-  <body>
+  <body ng-App="InvertedIndexApp">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -50,8 +52,8 @@
       </div>
     </nav>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <main ng-Controller="invIndexController">
+      <div class="jumbotron">
       <div class="container">
         <h2>How to use this app</h2>
         <ul class="list-group">
@@ -63,7 +65,7 @@
           index for the document</li>
         </ul>
         <label>Select file(s)</label>
-        <input type="file" multiple>
+        <input type="file" id="select-files" multiple>
         <!--Use Angular or jQuery to do this change message depending upload status??-->
         <!--<div class="alert alert-success" role="alert">
            <strong>Uploaded successfull</strong>
@@ -95,6 +97,9 @@
         </div>
       </div>
     </div>
+    </main>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    
 
     <div class="container">
       <!-- Example row of columns -->
