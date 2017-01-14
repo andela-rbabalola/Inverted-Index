@@ -29,6 +29,16 @@ class InvertedIndex{
 		return(uniqueWords);
 	}
 
+	//function to 'sort' the keys of the inverted index object
+	static sortObjectKeys(index){
+		let sortedKeys = Object.keys(index).sort();
+		let sortedObject = {}; //Object that will contain the sorted object
+		sortedKeys.forEach((key)=>{
+			sortedObject[key] = index[key];
+		});
+		return(sortedObject);
+	}
+
 	/*
 	* @param{Array} docToIndex - A JSON array of text objects to index
 	* @return{Object} index - An object that maps words to locations
@@ -46,7 +56,6 @@ class InvertedIndex{
 			/*if word is not a key in the index create it as a key
 			* assign it an empty array
 			*/
-
 		    if(Object.keys(index).indexOf(word) === -1){
 			    index[word] = [];
 			    index[word].push(docIndex + 1);
@@ -56,7 +65,7 @@ class InvertedIndex{
 		});
 	});
 		this.index = index;
-		return index;
+		return InvertedIndex.sortObjectKeys(index);
 	}
 
    /*
