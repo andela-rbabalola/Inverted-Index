@@ -35,28 +35,26 @@ class InvertedIndex{
 	**/
 
 	getIndex(docToIndex){
-		const allWords = [];
 		const index = {};
-		const fileLength = docToIndex.length;
-		if(fileLength === 0){
-			return 'JSON file must non-empty';
-		}
-		//Push the doc titles and text into an array
 		docToIndex.forEach((document, docIndex) => {
-			allWords.push(`${document.title.toLowerCase()} ${document.text
-            .toLowerCase()}`);
+			let cleanWords = InvertedIndex.clean(document.text);
+			//remove duplicates from words
+			let uniqueWords = InvertedIndex.removeDuplicates(cleanWords);
+
+			//loop again on each word in clean words
+			uniqueWords.forEach((word) => {
+			/*if word is not a key in the index create it as a key
+			* assign it an empty array
+			*/
+
+		    if(Object.keys(index).indexOf(word) === -1){
+			    index[word] = [];
+			    index[word].push(docIndex + 1);
+		    } else{
+			    index[word].push(docIndex + 1);
+		    }
 		});
-		const tokens = InvertedIndex.clean(allWords.join(' '));
-		const uniqueWords = InvertedIndex.removeDuplicates(tokens);
-		//loop over unique words and create the index
-		uniqueWords.forEach((word) => {
-			index[word] = [];
-			allWords.forEach((document, docIndex)=>{
-				if(document.indexOf(word) > -1){
-					index[word].push(docIndex + 1);
-				}
-		  });
-	    });
+	});
 		this.index = index;
 		return index;
 	}

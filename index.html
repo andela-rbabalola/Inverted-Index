@@ -45,7 +45,7 @@
             <button type="button" class="btn btn-primary" ng-click="createIndex()">Create Index</button>
             <select class="form-control" id="exampleSelect1" ng-model="selectedFile" ng-options="file for file in allFiles">
             </select>
-          <table class="table table-striped" ng-if="uploadSuccess && indexExists">
+          <table class="table table-bordered" ng-if="uploadSuccess && indexExists">
               <thead>
                 <tr>
                   <th>Words</th>
@@ -66,7 +66,7 @@
             <button type="button" class="btn btn-primary" ng-click="searchDoc()">Search Index</button>
             <br>
             <input class="form-control" id="exampleTextarea" rows="1" placeholder="Search for words here" ng-model="searchQuery"></input>
-            <table class="table table-striped" ng-if="uploadSuccess && indexExists && validSearch">
+            <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch">
               <thead>
                 <tr>
                   <th>Search Query</th>
