@@ -9,7 +9,7 @@ class InvertedIndex{
      * @preturn{Array} cleanText - An array of sorted strings without non-alphanumeric symbols
      **/
 	static clean(text){
-		let cleanText = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+		let cleanText = text.replace(/[\[\].,\/#!$%\^&\*;:{}?=\-_`~()]/g,"")
 		 					.replace(/\s{2,}/g, " ")
 		 					.toLowerCase()
 		 					.split(' ')
@@ -18,7 +18,7 @@ class InvertedIndex{
 	}
 
 	/*
-	* @param{Array} words - An array of strings 
+	* @param{Array} words - An array of strings
 	* @param{Array} uniqueWords - An array non-duplicate strings
 	*/
 
@@ -64,14 +64,16 @@ class InvertedIndex{
    /*
    * @param{String} terms - Search query
    * @param{Object} invIndex - Index to perform search on
-   * @return{Object} results - Object that maps terms in search query to documents 
+   * @return{Object} results - Object that maps terms in search query to documents
    */
    searchIndex(terms, invIndex){
    	let results = {};
+		//clean and tokenize the search query
+		let cleanTerms = InvertedIndex.clean(terms);
    	//get only the unique words from the term array
-   	let uniqueWords = InvertedIndex.removeDuplicates(terms);
-   	//perform cleanning operations on query terms
-   	terms.forEach((term) =>{
+   	let uniqueWords = InvertedIndex.removeDuplicates(cleanTerms);
+   	//perform cleaning operations on query terms
+   	cleanTerms.forEach((term) =>{
    		if(Object.keys(invIndex).indexOf(term) > -1){
    			results[term] = invIndex[term];
    		} else {
@@ -81,5 +83,3 @@ class InvertedIndex{
    	return(results);
    }
 }
-
-

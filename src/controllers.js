@@ -14,6 +14,8 @@
 			const file = $scope.myFile;
 			const reader = new FileReader();
 			reader.readAsText(file);
+			//array that contains all the files uploaded in that session
+			$scope.allFiles = [];
 
 			reader.onload = (a) => {
 				if(!file.name.toLowerCase().match(/\.json$/)){
@@ -28,6 +30,7 @@
 						$scope.$apply();
 					} else {
 						$scope.uploadSuccess = true;
+						$scope.allFiles.push(file.name);
 					}
 					$scope.theFile = theFile;
                     $scope.$apply();
@@ -52,6 +55,17 @@
 			} else {
 				$scope.indexExists = false;
 				uploadMessage('Upload a JSON file first');
+			}
+		};
+
+		$scope.searchDoc = () => {
+			if($scope.uploadSuccess && $scope.indexExists){
+				$scope.query = $scope.searchQuery;
+				$scope.searchResults = invIndex.searchIndex($scope.query, $scope.theIndex);
+
+				$scope.validSearch = true;
+			} else{
+				$scope.validSearch = false;
 			}
 		};
 	});

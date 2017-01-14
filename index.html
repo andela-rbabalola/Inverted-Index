@@ -26,7 +26,7 @@
           <li class="list-group-item">Use the search index button to search the inverted
           index for the document</li>
         </ul>
-        <label>Select file(s)</label>
+        <label>Select file</label>
         <input type="file" file-model="myFile" id = "myFileField" accept="json">
 
       </div>
@@ -36,18 +36,16 @@
       <main>
       <div class="container">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
             <button type="button" class="btn btn-primary" ng-click="uploadFile()">Upload file</button>
             <p ng-show="!uploadSuccess" id="error-paragraph"><strong>{{ uploadError }}</strong></p>
             <p ng-show="uploadSuccess" id="success-paragraph"><strong>Upload Successful!</strong></p>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-5">
             <button type="button" class="btn btn-primary" ng-click="createIndex()">Create Index</button>
-            <select class="form-control" id="exampleSelect1">
-              <!--Options here should be the names of files uploaded-->
-              <option>1</option>
-          </select>
-          <table class="table" ng-if="uploadSuccess && indexExists">
+            <select class="form-control" id="exampleSelect1" ng-model="selectedFile" ng-options="file for file in allFiles">
+            </select>
+          <table class="table table-striped" ng-if="uploadSuccess && indexExists">
               <thead>
                 <tr>
                   <th>Words</th>
@@ -64,10 +62,26 @@
               </tbody>
             </table>
           </div>
-          <div class="col-md-6">
-            <button type="button" class="btn btn-primary">Search Index</button>
+          <div class="col-md-5">
+            <button type="button" class="btn btn-primary" ng-click="searchDoc()">Search Index</button>
             <br>
-            <textarea class="form-control" id="exampleTextarea" rows="1"></textarea>
+            <input class="form-control" id="exampleTextarea" rows="1" placeholder="Search for words here" ng-model="searchQuery"></input>
+            <table class="table table-striped" ng-if="uploadSuccess && indexExists && validSearch">
+              <thead>
+                <tr>
+                  <th>Search Query</th>
+                  <th ng-repeat="doc in docs">{{doc}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="(key, value) in searchResults">
+                  <td style="text-align: center">{{key}}</td>
+                  <td ng-repeat="i in range" style="text-align: center; font-weight: bold">
+                    <span ng-if="value.includes(i)"> X </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -6,7 +6,8 @@
 	*/
 	app.directive('fileModel', function($parse){
 		return {
-			restrict: 'A', //directive can be used as attribute
+			//directive can be used as attribute
+			restrict: 'A',
 			/*
              link is a function that defines functionality of directive
              scope: scope associated with the element
@@ -22,7 +23,7 @@
              		//Call apply on scope, it checks for value changes and reflect them on UI
              		scope.$apply(function(){
              			//set the model value
-             			modelSetter(scope, element[0].files[0]); 
+             			modelSetter(scope, element[0].files[0]);
              		});
              	});
              }
