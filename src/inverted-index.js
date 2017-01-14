@@ -41,7 +41,7 @@ class InvertedIndex{
 		if(fileLength === 0){
 			return 'JSON file must non-empty';
 		}
-
+		//Push the doc titles and text into an array
 		docToIndex.forEach((document, docIndex) => {
 			allWords.push(`${document.title.toLowerCase()} ${document.text
             .toLowerCase()}`);
@@ -52,7 +52,6 @@ class InvertedIndex{
 		uniqueWords.forEach((word) => {
 			index[word] = [];
 			allWords.forEach((document, docIndex)=>{
-				//if word is not a key in the Object create it
 				if(document.indexOf(word) > -1){
 					index[word].push(docIndex + 1);
 				}

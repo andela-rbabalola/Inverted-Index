@@ -5,20 +5,35 @@ let sass = require('gulp-sass');
 let browserSync = require('browser-sync').create();
 let jasmineBrowser = require('gulp-jasmine-browser');
 let watch = require('gulp-watch');
+const babel = require('gulp-babel');
+const concat = require('gulp-concat');
 
 
 gulp.task('browserSync', ['build', 'watch'], function() {
   browserSync.init({
       server:{
-      	baseDir: './',
-      	index: 'index.html'
+        baseDir: './',
+        index: 'index.html'
       },
       port:3000,
       ghostMode: false
   });
 });
 
-gulp.task('build', ['sass']);
+
+//fsdfsdfsd
+ 
+gulp.task('jsTranspile', () => {
+    return gulp.src(['angular.min.js', 'src/app.js'])
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(concat('app.js'))
+        .pipe(gulp.dest('dist'));
+});
+
+
+gulp.task('build', ['jsTranspile', 'sass']);
 gulp.task('default', ['browserSync']);
 
 gulp.task('sass', function() {

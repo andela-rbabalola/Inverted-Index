@@ -4,57 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
     <link rel="stylesheet" href="css/index.css"/>
 
     <title>Inverted Index App</title>
 
-    <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-    <script type="text/javascript" src="app.js"></script>
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
-
-  <body ng-App="InvertedIndexApp">
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+  <body ng-app="invertedIndexApp">
+      <div class="jumbotron" ng-controller="uploadController">
       <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand navbar-light" href="#">Inverted Index App</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-        </div><!--/.navbar-collapse -->
+      <div>
       </div>
-    </nav>
 
-    <main ng-Controller="invIndexController">
-      <div class="jumbotron">
-      <div class="container">
         <h2>How to use this app</h2>
         <ul class="list-group">
           <li class="list-group-item">Choose the .json file that contains the documents you want to search</li>
@@ -65,29 +27,42 @@
           index for the document</li>
         </ul>
         <label>Select file(s)</label>
-        <input type="file" id="select-files" multiple>
-        <!--Use Angular or jQuery to do this change message depending upload status??-->
-        <!--<div class="alert alert-success" role="alert">
-           <strong>Uploaded successfull</strong>
-        </div>
-        <div class="alert alert-danger" role="alert">
-          <strong>Please check the file you uploaded</strong>
-        </div>
-        -->
+        <input type="file" file-model="myFile" id = "myFileField" accept="json">
+
       </div>
+
       <br>
 
+      <main>
       <div class="container">
         <div class="row">
           <div class="col-md-3">
-            <button type="button" class="btn btn-primary">Upload file</button>
+            <button type="button" class="btn btn-primary" ng-click="uploadFile()">Upload file</button>
+            <p ng-show="!uploadSuccess" id="error-paragraph"><strong>{{ uploadError }}</strong></p>
+            <p ng-show="uploadSuccess" id="success-paragraph"><strong>Upload Successful!</strong></p>
           </div>
           <div class="col-md-3">
-            <button type="button" class="btn btn-primary">Create Index</button>
+            <button type="button" class="btn btn-primary" ng-click="createIndex()">Create Index</button>
             <select class="form-control" id="exampleSelect1">
               <!--Options here should be the names of files uploaded-->
               <option>1</option>
           </select>
+          <table class="table" ng-if="uploadSuccess && indexExists">
+              <thead>
+                <tr>
+                  <th>Words</th>
+                  <th ng-repeat="doc in docs">{{doc}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="(key, value) in theIndex">
+                  <td style="text-align: center">{{key}}</td>
+                  <td ng-repeat="i in range" style="text-align: center; font-weight: bold">
+                    <span ng-if="value.includes(i)"> X </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div class="col-md-6">
             <button type="button" class="btn btn-primary">Search Index</button>
@@ -98,11 +73,8 @@
       </div>
     </div>
     </main>
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    
 
     <div class="container">
-      <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
           <h2>About Inverted Index</h2>
@@ -116,16 +88,13 @@
       <footer>
         <p>&copy; 2017 Rotimi Babalola</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="src/angular.min.js"></script>
+    <script type="text/javascript" src="src/inverted-index.js"></script>
+    <script type="text/javascript" src="src/app.js"></script>
+    <script type="text/javascript" src="src/controllers.js"></script>
+    <script type="text/javascript" src="src/directives.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
