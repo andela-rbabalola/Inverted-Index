@@ -41,11 +41,13 @@
             <p ng-show="!uploadSuccess" id="error-paragraph"><strong>{{ uploadError }}</strong></p>
             <p ng-show="uploadSuccess" id="success-paragraph"><strong>Upload Successful!</strong></p>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-6">
             <button type="button" class="btn btn-primary" ng-click="createIndex()">Create Index</button>
-            <select class="form-control" id="exampleSelect1" ng-model="selectedFile" ng-options="file for file in allFiles">
+            <p ng-show="indexExists"><strong>Index successfully created!</strong></p>
+            <select class="form-control" id="exampleSelect1" ng-model="selectedFile" ng-change="update()">
+              <option ng-repeat="file in allFiles" value="{{file}}">{{file}}</option>
             </select>
-          <table class="table table-bordered" ng-if="uploadSuccess && indexExists">
+          <table class="table table-bordered" ng-if="uploadSuccess && indexExists && displayTable">
               <thead>
                 <tr>
                   <th>Words</th>
@@ -53,7 +55,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="(key, value) in theIndex">
+                <tr ng-repeat="(key, value) in currentIndex">
                   <td style="text-align: center">{{key}}</td>
                   <td ng-repeat="i in range" style="text-align: center; font-weight: bold">
                     <span ng-if="value.includes(i)"> X </span>
@@ -64,9 +66,13 @@
           </div>
           <div class="col-md-5">
             <button type="button" class="btn btn-primary" ng-click="searchDoc()">Search Index</button>
+            <select class="form-control" id="exampleSelect2" ng-model="fileToSearch">
+              <option>All</option>
+              <option ng-repeat="file in allFiles" value="{{file}}">{{file}}</option>
+            </select>
             <br>
             <input class="form-control" id="exampleTextarea" rows="1" placeholder="Search for words here" ng-model="searchQuery"></input>
-            <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch">
+            <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch && displaySearchTable">
               <thead>
                 <tr>
                   <th>Search Query</th>
@@ -105,9 +111,9 @@
     </div>
 
     <script type="text/javascript" src="src/angular.min.js"></script>
-    <script type="text/javascript" src="src/inverted-index.js"></script>
+    <script type="text/javascript" src="src/inverted-index-2.js"></script>
     <script type="text/javascript" src="src/app.js"></script>
-    <script type="text/javascript" src="src/controllers.js"></script>
+    <script type="text/javascript" src="src/controller-2.js"></script>
     <script type="text/javascript" src="src/directives.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </body>

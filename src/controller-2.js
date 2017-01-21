@@ -9,20 +9,13 @@
 			$scope.uploadError = msg;
 		});
 	};
-	  //Array that contains all file names uploaded in that session
-		// $scope.allFiles = [];
-
-		/*Object that contains all indexes created in a session
-		* keys --> File names
-		* values --> Inverted Index for the file
-		*/
-		// $scope.allIndexes = {};
+		//Array that contains all file names uploaded in that session
+		 $scope.allFiles = [];
 
 		$scope.uploadFile = () => {
 			const file = $scope.myFile;
 			const reader = new FileReader();
 			reader.readAsText(file);
-			//array that contains the name of all files uploaded in a session
 
 			reader.onload = (a) => {
 				if(!file.name.toLowerCase().match(/\.json$/)){
@@ -36,13 +29,12 @@
 						uploadMessage('JSON file uploaded is invalid');
 						$scope.$apply();
 					} else {
+            console.log($scope.myFile.name);
 						$scope.uploadSuccess = true;
-						//console.log(theFile);
-						//$scope.allFiles.push(file.name);
-						//uploadMessage($scope.allFiles);
+						$scope.allFiles.push(file.name);
 					}
-					$scope.theFile = theFile;
-          $scope.$apply();
+					 $scope.theFile = theFile;
+           $scope.$apply();
 
 				} catch (e){
 					uploadMessage(e);
@@ -52,12 +44,10 @@
 
 		$scope.createIndex = () => {
 			if($scope.uploadSuccess){
-				$scope.theIndex = invIndex.getIndex($scope.theFile);
-
-				//add index to Object allIndexes
-				$scope.allIndexes[$scope.myFile.name] = $scope.theIndex;
-
-				$scope.docs = []; //array to contain the names of docs
+				$scope.theIndex = invIndex.createIndex($scope.myFile.name, $scope.theFile);
+        console.log($scope.theFile);
+				//array to contain the names of documents
+				$scope.docs = [];
 				$scope.range = [];
 				//iterate over the file and get the document names
 				$scope.theFile.forEach((document, docIndex) => {
@@ -65,15 +55,21 @@
 					$scope.range.push(docIndex + 1);
 				});
 				$scope.indexExists = true;
+				//uploadMessage("Index successfully created!");
+				$scope.createdIndexes = invIndex.getIndex();
+				console.log($scope.createdIndexes);
 			} else {
 				$scope.indexExists = false;
 				uploadMessage('Upload a JSON file first');
 			}
 		};
 
-		// $scope.update = () => {
-		// 	$scope.theIndex = $scope.allIndexes[$scope.file];
-		// };
+		//This function updates the table displayed by the select option
+		 $scope.update = () => {
+			$scope.displayTable = true;
+		 	$scope.currentIndex = $scope.createdIndexes[$scope.selectedFile];
+			console.log($scope.currentIndex);
+		 };
 
 		$scope.searchDoc = () => {
 			if($scope.uploadSuccess && $scope.indexExists){

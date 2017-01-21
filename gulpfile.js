@@ -22,22 +22,22 @@ gulp.task('browserSync', ['build', 'watch'], function() {
 
 
 //fsdfsdfsd
- 
-gulp.task('jsTranspile', () => {
-    return gulp.src(['angular.min.js', 'src/app.js'])
-        .pipe(babel({
-            presets: ['es2015']
-        }))
-        .pipe(concat('app.js'))
-        .pipe(gulp.dest('dist'));
-});
+
+// gulp.task('jsTranspile', () => {
+//     return gulp.src(['angular.min.js', 'src/app.js'])
+//         .pipe(babel({
+//             presets: ['es2015']
+//         }))
+//         .pipe(concat('app.js'))
+//         .pipe(gulp.dest('dist'));
+// });
 
 
-gulp.task('build', ['jsTranspile', 'sass']);
+gulp.task('build', ['sass']);
 gulp.task('default', ['browserSync']);
 
 gulp.task('sass', function() {
-     gulp.src('./scss/*.scss') 
+     gulp.src('./scss/*.scss')
     .pipe(sass())
     .pipe(gulp.dest('./css'))
     .pipe(browserSync.reload({
@@ -46,8 +46,8 @@ gulp.task('sass', function() {
 });
 
 gulp.task('watch', function (){
-  gulp.watch('./scss/*.scss', ['sass']); 
-  gulp.watch('./css/*.css', browserSync.reload); 
+  gulp.watch('./scss/*.scss', ['sass']);
+  gulp.watch('./css/*.css', browserSync.reload);
   gulp.watch('index.html', browserSync.reload);
   gulp.watch(['./src/*.js', './jasmine/spec/*.js'], browserSync.reload);
 });

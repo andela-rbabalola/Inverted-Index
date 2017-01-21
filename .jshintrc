@@ -1,6 +1,10 @@
 {
-    "eqeqeq": true,
+  "eqeqeq": true,
 	"curly": true,
 	"esversion": 6,
-	"varstmt": true
+	"varstmt": true,
+	"globals":{
+	  "require":false
+	},
+	"jasmine": true
 }

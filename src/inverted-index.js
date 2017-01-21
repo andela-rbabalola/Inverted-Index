@@ -1,3 +1,17 @@
+// 'use strict';
+// let docs_1 = [
+//   {
+//   	"title": "Fifty Shades Of Grey",
+//   	"text": "A billionaire with a tormented past finds redemption in a young girl"
+//   },
+
+//   {
+//   	"title": "Things fall apart",
+//   	"text": "An African classic about an Igbo wrestler"
+//   }
+
+// ];
+
 class InvertedIndex{
 	constructor(){
 		//Object to store the index
@@ -10,10 +24,10 @@ class InvertedIndex{
      **/
 	static clean(text){
 		let cleanText = text.replace(/[\[\].,\/#!$%\^&\*;:{}?=\-_`~()]/g,"")
-		 					.replace(/\s{2,}/g, " ")
-		 					.toLowerCase()
-		 					.split(' ')
-		 					.sort();
+		 					          .replace(/\s{2,}/g, " ")
+		 					          .toLowerCase()
+		 					          .split(' ')
+		 					          .sort();
 		return(cleanText);
 	}
 
@@ -46,6 +60,7 @@ class InvertedIndex{
 
 	getIndex(docToIndex){
 		const index = {};
+		console.log(docToIndex);
 		docToIndex.forEach((document, docIndex) => {
 			let cleanWords = InvertedIndex.clean(document.text);
 			//remove duplicates from words
@@ -90,3 +105,10 @@ class InvertedIndex{
    	return(results);
    }
 }
+
+// //create instance
+// let newIndex = new InvertedIndex();
+// //console.log(newIndex.createIndex(docs_1, 'Doc_1'));
+// //console.log(newIndex.createIndex(docs_2, 'Doc_2'));
+// let baz = newIndex.createIndex(docs_1);
+// console.log(baz);
