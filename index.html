@@ -12,6 +12,20 @@
 
   </head>
   <body ng-app="invertedIndexApp">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Inverted Index App</a>
+        </div>
+        </div>
+      </div>
+    </nav>
       <div class="jumbotron" ng-controller="uploadController">
       <div class="container">
       <div>
@@ -38,26 +52,28 @@
         <div class="row">
           <div class="col-md-2">
             <button type="button" class="btn btn-primary" ng-click="uploadFile()">Upload file</button>
-            <p ng-show="!uploadSuccess" id="error-paragraph"><strong>{{ uploadError }}</strong></p>
-            <p ng-show="uploadSuccess" id="success-paragraph"><strong>Upload Successful!</strong></p>
+            <p ng-show="!uploadSuccess" id="error-paragraph">{{ uploadError }}</p>
+            <!--<p ng-show="oldFile" id="error-paragraph">{{ uploadError }}</p>-->
+            <p ng-show="uploadSuccess" id="success-paragraph">Upload Successful!</p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-5">
             <button type="button" class="btn btn-primary" ng-click="createIndex()">Create Index</button>
-            <p ng-show="indexExists"><strong>Index successfully created!</strong></p>
+            <p ng-show="indexExists">Index successfully created!</p>
             <select class="form-control" id="exampleSelect1" ng-model="selectedFile" ng-change="update()">
               <option ng-repeat="file in allFiles" value="{{file}}">{{file}}</option>
             </select>
+            <br>
           <table class="table table-bordered" ng-if="uploadSuccess && indexExists && displayTable">
               <thead>
                 <tr>
                   <th>Words</th>
-                  <th ng-repeat="doc in docs">{{doc}}</th>
+                  <th ng-repeat="doc in docs[selectedFile]">{{doc}}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="(key, value) in currentIndex">
                   <td style="text-align: center">{{key}}</td>
-                  <td ng-repeat="i in range" style="text-align: center; font-weight: bold">
+                  <td ng-repeat="i in range[selectedFile] track by $index" style="text-align: center; font-weight: bold">
                     <span ng-if="value.includes(i)"> X </span>
                   </td>
                 </tr>
@@ -65,24 +81,45 @@
             </table>
           </div>
           <div class="col-md-5">
+            <input class="form-control" id="exampleTextarea" rows="1" placeholder="Search..." ng-model="searchQuery"></input>
+
+            <br>
+
             <button type="button" class="btn btn-primary" ng-click="searchDoc()">Search Index</button>
-            <select class="form-control" id="exampleSelect2" ng-model="fileToSearch">
-              <option>All</option>
+            <select class="form-control" id="exampleSelect2" ng-model="fileToSearch" ng-change="hideTable()">
+              <option>All files</option>
               <option ng-repeat="file in allFiles" value="{{file}}">{{file}}</option>
             </select>
             <br>
-            <input class="form-control" id="exampleTextarea" rows="1" placeholder="Search for words here" ng-model="searchQuery"></input>
             <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch && displaySearchTable">
               <thead>
                 <tr>
                   <th>Search Query</th>
-                  <th ng-repeat="doc in docs">{{doc}}</th>
+                  <th ng-repeat="doc in docs[fileToSearch]">{{doc}}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="(key, value) in searchResults">
                   <td style="text-align: center">{{key}}</td>
-                  <td ng-repeat="i in range" style="text-align: center; font-weight: bold">
+                  <td ng-repeat="i in range[fileToSearch] track by $index" style="text-align: center; font-weight: bold">
+                    <span ng-if="value.includes(i)"> X </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable" ng-repeat="file in allFiles">
+              <p ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable">Search Results in all files</p>
+              <thead>
+                <tr>
+                  <th>Search Query</th>
+                  <th ng-repeat="doc in docs[file]">{{doc}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="(key, value) in searchResults[file]">
+                  <td style="text-align: center">{{key}}</td>
+                  <td ng-repeat="i in range[file]" style="text-align: center; font-weight: bold">
                     <span ng-if="value.includes(i)"> X </span>
                   </td>
                 </tr>
@@ -99,7 +136,7 @@
         <div class="col-md-4">
           <h2>About Inverted Index</h2>
           <p>An inverted index is a data structure that makes search for text blocks in documents easier and faster</p>
-          <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+          <p><a class="btn btn-default" href="https://en.wikipedia.org/wiki/Inverted_index" target="_blank" role="button">Learn more &raquo;</a></p>
         </div>
       </div>
 
@@ -111,9 +148,9 @@
     </div>
 
     <script type="text/javascript" src="src/angular.min.js"></script>
-    <script type="text/javascript" src="src/inverted-index-2.js"></script>
+    <script type="text/javascript" src="src/inverted-index.js"></script>
     <script type="text/javascript" src="src/app.js"></script>
-    <script type="text/javascript" src="src/controller-2.js"></script>
+    <script type="text/javascript" src="src/controllers.js"></script>
     <script type="text/javascript" src="src/directives.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </body>

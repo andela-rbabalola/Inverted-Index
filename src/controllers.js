@@ -1,4 +1,3 @@
-//handler for the Upload file button
 (function (){
 	let app = angular.module('invertedIndexApp');
 	//create instance of InvertedIndex object
@@ -9,20 +8,18 @@
 			$scope.uploadError = msg;
 		});
 	};
-	  //Array that contains all file names uploaded in that session
-		// $scope.allFiles = [];
-
-		/*Object that contains all indexes created in a session
-		* keys --> File names
-		* values --> Inverted Index for the file
-		*/
-		// $scope.allIndexes = {};
+		//Array that contains all file names uploaded in that session
+		$scope.allFiles = [];
+		//Array to contain the document title in each file
+		$scope.docs = {};
+		//Helps for iteration ?? Explain more
+		//Object that contains the doc numbers for docs in each file
+		$scope.range = {};
 
 		$scope.uploadFile = () => {
 			const file = $scope.myFile;
 			const reader = new FileReader();
 			reader.readAsText(file);
-			//array that contains the name of all files uploaded in a session
 
 			reader.onload = (a) => {
 				if(!file.name.toLowerCase().match(/\.json$/)){
@@ -36,13 +33,17 @@
 						uploadMessage('JSON file uploaded is invalid');
 						$scope.$apply();
 					} else {
-						$scope.uploadSuccess = true;
-						//console.log(theFile);
-						//$scope.allFiles.push(file.name);
-						//uploadMessage($scope.allFiles);
+						//ensure a file with the same name is not upload twice
+						if($scope.allFiles.indexOf(file.name) > -1){
+							uploadMessage('File has been uploaded before!');
+							$scope.uploadSuccess = false;
+						} else {
+							$scope.uploadSuccess = true;
+							$scope.allFiles.push(file.name);
+						}
 					}
-					$scope.theFile = theFile;
-          $scope.$apply();
+					 $scope.theFile = theFile;
+           $scope.$apply();
 
 				} catch (e){
 					uploadMessage(e);
@@ -52,35 +53,78 @@
 
 		$scope.createIndex = () => {
 			if($scope.uploadSuccess){
-				$scope.theIndex = invIndex.getIndex($scope.theFile);
+				$scope.theIndex = invIndex.createIndex($scope.myFile.name, $scope.theFile);
 
-				//add index to Object allIndexes
-				$scope.allIndexes[$scope.myFile.name] = $scope.theIndex;
+				//check indexes if file has been uploaded don't add another table
+				//check if file name is already a key
 
-				$scope.docs = []; //array to contain the names of docs
-				$scope.range = [];
 				//iterate over the file and get the document names
 				$scope.theFile.forEach((document, docIndex) => {
-					$scope.docs.push(`${document.title}`);
-					$scope.range.push(docIndex + 1);
-				});
+
+				if(Object.keys($scope.docs).indexOf($scope.myFile.name) === -1 ){
+					$scope.docs[$scope.myFile.name] = [];
+					$scope.docs[$scope.myFile.name].push(`${document.title}`);
+				} else{
+					$scope.docs[$scope.myFile.name].push(`${document.title}`);
+				}
+
+				if(Object.keys($scope.range).indexOf($scope.myFile.name) === -1){
+					//If we don't have an entry for that file create it and push the current docIndex to it
+					$scope.range[$scope.myFile.name] = [];
+					$scope.range[$scope.myFile.name].push(docIndex + 1);
+				} else {
+					//check if current doc Index is not in the array for that file
+					//and then push it
+					$scope.range[$scope.myFile.name].push(docIndex + 1);
+				}
+			});
 				$scope.indexExists = true;
+				$scope.createdIndexes = invIndex.getIndex();
+
+
+				//set indexExists to false if file has been uploaded???
+
 			} else {
 				$scope.indexExists = false;
 				uploadMessage('Upload a JSON file first');
 			}
 		};
 
-		// $scope.update = () => {
-		// 	$scope.theIndex = $scope.allIndexes[$scope.file];
-		// };
+		  //This function updates the table displayed by the select option
+		  $scope.update = () => {
+			$scope.displayTable = true;
+		 	$scope.currentIndex = $scope.createdIndexes[$scope.selectedFile];
+		 };
+
+		 //This hides the tables when necessary
+		 $scope.hideTable = () => {
+			 $scope.multipleSearchTable = false;
+			 $scope.displaySearchTable = false;
+		 };
 
 		$scope.searchDoc = () => {
 			if($scope.uploadSuccess && $scope.indexExists){
-				$scope.query = $scope.searchQuery;
-				$scope.searchResults = invIndex.searchIndex($scope.query, $scope.theIndex);
+				if($scope.fileToSearch === "All files"){
+					//display search for all docs because filename is not specified
+					$scope.query = $scope.searchQuery;
 
-				$scope.validSearch = true;
+					//disable table for single document search
+					//enable table for multiple search
+					$scope.displaySearchTable = false;
+					$scope.multipleSearchTable = true;
+					$scope.validSearch = true;
+
+					//get and search all the indexes for files uploaded
+					$scope.searchResults = invIndex.searchIndex($scope.query);
+
+				} else {
+					$scope.query = $scope.searchQuery;
+					$scope.searchResults = invIndex.searchIndex($scope.fileToSearch, $scope.query);
+
+					$scope.displaySearchTable = true;
+					$scope.multipleSearchTable = false;
+					$scope.validSearch = true;
+				}
 			} else{
 				$scope.validSearch = false;
 			}

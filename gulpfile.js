@@ -1,13 +1,12 @@
-/*jslint node: true */
-'use strict';
-let gulp = require('gulp');
-let sass = require('gulp-sass');
-let browserSync = require('browser-sync').create();
-let jasmineBrowser = require('gulp-jasmine-browser');
-let watch = require('gulp-watch');
+const gulp = require('gulp');
+const sass = require('gulp-sass');
+const browserSync = require('browser-sync').create();
+const jasmineBrowser = require('gulp-jasmine-browser');
+const watch = require('gulp-watch');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
-
+const browserify = require('gulp-browserify');
+const rename = require('gulp-rename');
 
 gulp.task('browserSync', ['build', 'watch'], function() {
   browserSync.init({
@@ -20,21 +19,8 @@ gulp.task('browserSync', ['build', 'watch'], function() {
   });
 });
 
-
-//fsdfsdfsd
-
-// gulp.task('jsTranspile', () => {
-//     return gulp.src(['angular.min.js', 'src/app.js'])
-//         .pipe(babel({
-//             presets: ['es2015']
-//         }))
-//         .pipe(concat('app.js'))
-//         .pipe(gulp.dest('dist'));
-// });
-
-
 gulp.task('build', ['sass']);
-gulp.task('default', ['browserSync']);
+gulp.task('default', ['browserSync', 'scripts']);
 
 gulp.task('sass', function() {
      gulp.src('./scss/*.scss')
@@ -54,10 +40,17 @@ gulp.task('watch', function (){
 
 
 gulp.task('jasmine', function(){
-  let filesForTest = ['./jasmine/spec/less/**/*'];
+  const filesForTest = ['./jasmine/spec/less/**/*'];
     gulp.src(filesForTest)
     .pipe(watch(filesForTest))
     .pipe(jasmineBrowser.specRunner({console: true}))
     .pipe(jasmineBrowser.headless());
 
+});
+
+gulp.task('scripts', () => {
+  gulp.src('spec/inverted-index-test.js')
+    .pipe(browserify())
+    .pipe(rename('bundle.js'))
+    .pipe(gulp.dest('spec/jasmine/build'));
 });
