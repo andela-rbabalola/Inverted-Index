@@ -83,9 +83,6 @@ describe('Test suite for Inverted Index', () => {
       it('Should have the getIndex method defined', () => {
         expect(theIndex.getIndex).toBeDefined();
       });
-
-      //Tests for Exceeds
-
     });
 
     describe('Populate Index', () => {
