@@ -55,9 +55,6 @@
 			if($scope.uploadSuccess){
 				$scope.theIndex = invIndex.createIndex($scope.myFile.name, $scope.theFile);
 
-				//check indexes if file has been uploaded don't add another table
-				//check if file name is already a key
-
 				//iterate over the file and get the document names
 				$scope.theFile.forEach((document, docIndex) => {
 
@@ -80,10 +77,6 @@
 			});
 				$scope.indexExists = true;
 				$scope.createdIndexes = invIndex.getIndex();
-
-
-				//set indexExists to false if file has been uploaded???
-
 			} else {
 				$scope.indexExists = false;
 				uploadMessage('Upload a JSON file first');

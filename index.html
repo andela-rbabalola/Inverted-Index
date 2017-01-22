@@ -53,7 +53,6 @@
           <div class="col-md-2">
             <button type="button" class="btn btn-primary" ng-click="uploadFile()">Upload file</button>
             <p ng-show="!uploadSuccess" id="error-paragraph">{{ uploadError }}</p>
-            <!--<p ng-show="oldFile" id="error-paragraph">{{ uploadError }}</p>-->
             <p ng-show="uploadSuccess" id="success-paragraph">Upload Successful!</p>
           </div>
           <div class="col-md-5">
@@ -90,7 +89,9 @@
               <option>All files</option>
               <option ng-repeat="file in allFiles" value="{{file}}">{{file}}</option>
             </select>
+
             <br>
+
             <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch && displaySearchTable">
               <thead>
                 <tr>

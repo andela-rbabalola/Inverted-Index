@@ -71,8 +71,7 @@ createIndex(filename, docToIndex){
 			//don't return it yet
 			this.indexes[filename] = index;
 		}
-	}
-
+ }
 
 	/*
 	* This function return all the created indexes in an object
@@ -127,11 +126,9 @@ createIndex(filename, docToIndex){
 		    let fileIndex = allIndexes[allArgs[0]];
 
         //remove the first element of the array
-        //because  it is the file name is specified and
+		    //because  it is the file name is specified and
 		    //we don't want to search for it :)
 		    allArgs.shift();
-        //we need to clean the search terms here
-        //allArgs =
 		    allArgs.forEach((word) => {
 		      if(Object.keys(fileIndex).indexOf(word) > -1){
 		        searchResults[word] = fileIndex[word];
