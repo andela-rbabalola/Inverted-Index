@@ -26,7 +26,10 @@
 					$scope.uploadSuccess = false;
 					uploadMessage('Please upload a JSON file');
 					return;
-				} try {
+				} else if(file === undefined){
+					alert("Please upload a file first");
+				}
+				try {
 					const theFile = JSON.parse(a.target.result);
 					if(theFile.length === 0 || !theFile[0].title || !theFile[0].text){
 						$scope.uploadSuccess = false;
@@ -44,42 +47,45 @@
 					}
 					 $scope.theFile = theFile;
            $scope.$apply();
-
 				} catch (e){
 					uploadMessage(e);
 				}
 			};
-		};
+	};
 
 		$scope.createIndex = () => {
 			if($scope.uploadSuccess){
-				$scope.theIndex = invIndex.createIndex($scope.myFile.name, $scope.theFile);
-
-				//iterate over the file and get the document names
-				$scope.theFile.forEach((document, docIndex) => {
-
-				if(Object.keys($scope.docs).indexOf($scope.myFile.name) === -1 ){
-					$scope.docs[$scope.myFile.name] = [];
-					$scope.docs[$scope.myFile.name].push(`${document.title}`);
+				if(Object.keys(invIndex.getIndex()).indexOf($scope.myFile.name) > -1){
+					alert("Index for file already exists");
 				} else{
-					$scope.docs[$scope.myFile.name].push(`${document.title}`);
-				}
+					$scope.theIndex = invIndex.createIndex($scope.myFile.name, $scope.theFile);
 
-				if(Object.keys($scope.range).indexOf($scope.myFile.name) === -1){
-					//If we don't have an entry for that file create it and push the current docIndex to it
-					$scope.range[$scope.myFile.name] = [];
-					$scope.range[$scope.myFile.name].push(docIndex + 1);
-				} else {
-					//check if current doc Index is not in the array for that file
-					//and then push it
-					$scope.range[$scope.myFile.name].push(docIndex + 1);
+					//iterate over the file and get the document names
+					$scope.theFile.forEach((document, docIndex) => {
+						if(Object.keys($scope.docs).indexOf($scope.myFile.name) === -1 ){
+							$scope.docs[$scope.myFile.name] = [];
+							$scope.docs[$scope.myFile.name].push(`${document.title}`);
+						} else{
+							$scope.docs[$scope.myFile.name].push(`${document.title}`);
+						}
+
+						if(Object.keys($scope.range).indexOf($scope.myFile.name) === -1){
+							//If we don't have an entry for that file create it and push the current docIndex to it
+							$scope.range[$scope.myFile.name] = [];
+							$scope.range[$scope.myFile.name].push(docIndex + 1);
+						} else{
+							//check if current doc Index is not in the array for that file
+							//and then push it
+							$scope.range[$scope.myFile.name].push(docIndex + 1);
+						}
+					});
+					$scope.indexExists = true;
+					$scope.createdIndexes = invIndex.getIndex();
 				}
-			});
-				$scope.indexExists = true;
-				$scope.createdIndexes = invIndex.getIndex();
-			} else {
+			} else{
 				$scope.indexExists = false;
-				uploadMessage('Upload a JSON file first');
+				//uploadMessage('Upload a JSON file first');
+				alert("Please upload a JSON file first");
 			}
 		};
 
@@ -97,6 +103,8 @@
 
 		$scope.searchDoc = () => {
 			if($scope.uploadSuccess && $scope.indexExists){
+				//check if the Search query is an empty string or whitespace
+
 				if($scope.fileToSearch === "All files"){
 					//display search for all docs because filename is not specified
 					$scope.query = $scope.searchQuery;
