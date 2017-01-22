@@ -37,7 +37,7 @@
 						$scope.allFiles.push(file.name);
 					}
 					 $scope.theFile = theFile;
-           $scope.$apply();
+           				 $scope.$apply();
 
 				} catch (e){
 					uploadMessage(e);
