@@ -1,4 +1,3 @@
- (function (){
- 	let app = angular.module('invertedIndexApp', []);
- 	
- })();
+(() => {
+  const app = angular.module('invertedIndexApp', []);
+})();

@@ -42,7 +42,6 @@
         </ul>
         <label>Select file</label>
         <input type="file" file-model="myFile" id = "myFileField" accept="json">
-
       </div>
 
       <br>
@@ -53,11 +52,14 @@
           <div class="col-md-2">
             <button type="button" class="btn btn-primary" ng-click="uploadFile()">Upload file</button>
             <p ng-show="!uploadSuccess" id="error-paragraph">{{ uploadError }}</p>
-            <p ng-show="uploadSuccess" id="success-paragraph">Upload Successful!</p>
+            <div class="alert alert-success" ng-show="hideSuccess" id="success-paragraph" role="alert">Upload Successful!</div>
           </div>
           <div class="col-md-5">
             <button type="button" class="btn btn-primary" ng-click="createIndex()">Create Index</button>
-            <p ng-show="indexExists">Index successfully created!</p>
+            <div class="alert alert-success" ng-show="indexSuccess" role="alert">Index successfully created!</div>
+            <div class="alert alert-danger" role="alert" ng-show="oldFile">
+              Index for file already exists!
+            </div>
             <select class="form-control" id="exampleSelect1" ng-model="selectedFile" ng-change="update()">
               <option ng-repeat="file in allFiles" value="{{file}}">{{file}}</option>
             </select>
@@ -110,7 +112,7 @@
             </table>
 
             <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable" ng-repeat="file in allFiles">
-              <p ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable">Search Results in all files</p>
+              <p ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable" ng-repeat="file in allFiles">Search Results in all files</p>
               <thead>
                 <tr>
                   <th>Search Query</th>
