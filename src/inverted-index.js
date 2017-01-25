@@ -12,15 +12,14 @@ class InvertedIndex {
   }
   /**
    * @param {String} text - Words to get tokens from
-   * @return {Array} cleanText - An array of sorted strings without non-alphanumeric symbols
+   * @return {Array}  An array of sorted strings without non-alphanumeric symbols
    */
   static clean(text) {
-    const cleanText = text.replace(/[\[\].,\/#!$%\^&\*;:{}?=\-_`~()]/g, '')
-      .replace(/\s{2,}/g, ' ')
-      .toLowerCase()
-      .split(' ')
-      .sort();
-    return (cleanText);
+    return text.replace(/[^a-z0-9\s]+/gi, '')
+             .replace(/\s{2,}/g, ' ')
+             .toLowerCase()
+             .split(' ')
+             .sort();
   }
 
   /**
@@ -28,8 +27,7 @@ class InvertedIndex {
    * @return {Array} uniqueWords - An array non-duplicate strings
    */
   static removeDuplicates(words) {
-    const uniqueWords = words.filter((item, index) => words.indexOf(item) === index);
-    return (uniqueWords);
+    return words.filter((item, index) => words.indexOf(item) === index);
   }
 
   /**
@@ -55,10 +53,10 @@ class InvertedIndex {
   createIndex(filename, docToIndex) {
     // This object stores the index of the current document
     let index = {};
-    // Ensure JSON file is not empty
+    // Ensure JSON file is not empty or invalid
     if (docToIndex.length === 0) {
       this.indexes[filename] = 'JSON file is empty';
-    } else if (Object.keys(docToIndex[0]).indexOf('title') === -1 || Object.keys(docToIndex[0]).indexOf('text') === -1) {
+    } else if (!docToIndex[0].title && !docToIndex[0].text) {
       this.indexes[filename] = 'JSON file is invalid';
     } else {
       docToIndex.forEach((document, docIndex) => {
@@ -68,10 +66,8 @@ class InvertedIndex {
         uniqueWords.forEach((word) => {
           if (Object.keys(index).indexOf(word) === -1) {
             index[word] = [];
-            index[word].push(docIndex + 1);
-          } else {
-            index[word].push(docIndex + 1);
           }
+          index[word].push(docIndex + 1);
         });
       });
       // Sort the index keys
@@ -86,7 +82,7 @@ class InvertedIndex {
    * @returns{Object} - Object that contains all the index
    */
   getIndex() {
-    return (this.indexes);
+    return this.indexes;
   }
 
   /**

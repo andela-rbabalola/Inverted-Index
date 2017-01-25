@@ -41,7 +41,6 @@ module.exports=[
 
 ]
 },{}],4:[function(require,module,exports){
-/* eslint no-undef:0 */
 const docs = require('./books');
 const secondDoc = require('./books_2');
 const emptyDoc = require('./empty.json');
@@ -140,7 +139,6 @@ describe('Test suite for Inverted Index', () => {
     });
 
     // Should ensure a new index is not overwritten
-    // This will be tested in two ways
     it('Should ensure a new index does not overwrite other indexes', () => {
       // Check that allIndexes Object has number of keys greater than 1
       expect(Object.keys(allIndexes).length).toBeGreaterThan(1);
@@ -153,11 +151,11 @@ describe('Test suite for Inverted Index', () => {
     });
 
     it('Should return the correct results', () => {
-      expect(theIndex.searchIndex('books.json', 'ring')).toEqual({ 'ring': [2] });
+      expect(theIndex.searchIndex('books.json', 'ring')).toEqual({ ring: [2] });
     });
 
     it('Should return the correct results', () => {
-      expect(theIndex.searchIndex('books.json', 'an')).toEqual({ 'an': [2, 4] });
+      expect(theIndex.searchIndex('books.json', 'an')).toEqual({ an: [2, 4] });
     });
 
     it('Should return correct results for searching all documents', () => {

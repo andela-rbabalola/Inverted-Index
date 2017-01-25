@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/index.css"/>
 
     <title>Inverted Index App</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css"/>
 
   </head>
   <body ng-app="invertedIndexApp">
@@ -41,7 +41,7 @@
           index for the document</li>
         </ul>
         <label>Select file</label>
-        <input type="file" file-model="myFile" id = "myFileField" accept="json">
+        <input type="file" file-model="myFile" id = "myFileField" accept=".json">
       </div>
 
       <br>
@@ -150,7 +150,7 @@
       </footer>
     </div>
 
-    <script type="text/javascript" src="src/angular.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
     <script type="text/javascript" src="src/inverted-index.js"></script>
     <script type="text/javascript" src="src/app.js"></script>
     <script type="text/javascript" src="src/controllers.js"></script>
