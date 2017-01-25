@@ -1,6 +1,5 @@
 jasmine/build
 .vscode
 karma.conf.js
-jasmine/build
 /node_modules
-src/angular.min.js
+spec/jasmine/build/bundle.js
