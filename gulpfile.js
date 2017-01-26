@@ -57,3 +57,4 @@ gulp.task('scripts', () => {
 gulp.task('lint', () => gulp.src(['./src/*.js', './spec/jasmine/inverted-index-test.js'])
     .pipe(eslint())
     .pipe(eslint.format()));
+
