@@ -2,6 +2,9 @@ const docs = require('./books');
 const secondDoc = require('./books_2');
 const emptyDoc = require('./empty.json');
 const invalidDoc = require('./invalid.json');
+// This is a JSON file that already contains search results
+// I exported it to make this test suite cleaner
+const searchResults = require('./searchResults.json');
 // A test suite to read data from books
 describe('Test suite for Inverted Index', () => {
   // create an object of the Inverted Index class
@@ -126,82 +129,11 @@ describe('Test suite for Inverted Index', () => {
     });
 
     it('Should return correct results when filename is not specified', () => {
-      expect(theIndex.searchIndex(allSearchTerms)).toEqual(
-        {
-          'books.json':
-          {
-            powerful: [2],
-            dangerous: 'Word not found!',
-            young: [3],
-            spy: 'Word not found!',
-            wizard: [2],
-            elf: [2]
-          },
-          'books_2.json':
-          {
-            powerful: [1],
-            dangerous: [2],
-            young: [1],
-            spy: [2],
-            wizard: [1],
-            elf: 'Word not found!'
-          },
-          'empty_doc.json':
-          {
-            powerful: 'Word not found!',
-            dangerous: 'Word not found!',
-            young: 'Word not found!',
-            spy: 'Word not found!',
-            wizard: 'Word not found!',
-            elf: 'Word not found!'
-          },
-          'invalid_doc.json':
-          {
-            powerful: 'Word not found!',
-            dangerous: 'Word not found!',
-            young: 'Word not found!',
-            spy: 'Word not found!',
-            wizard: 'Word not found!',
-            elf: 'Word not found!'
-          }
-        }
-      );
+      expect(theIndex.searchIndex(allSearchTerms).toEqual(searchResults[0]));
     });
 
-    // Check for search time
     it('Should be able to handle an array of search arguments', () => {
-      expect(theIndex.searchIndex(['an', 'ring', 'a'], 'life')).toEqual(
-        {
-          'books.json':
-          {
-            an: [2, 4],
-            ring: [2],
-            a: [1, 2, 3],
-            life: 'Word not found!'
-          },
-          'books_2.json':
-          {
-            an: 'Word not found!',
-            ring: 'Word not found!',
-            a: [1, 2],
-            life: 'Word not found!'
-          },
-          'empty_doc.json':
-          {
-            an: 'Word not found!',
-            ring: 'Word not found!',
-            a: 'Word not found!',
-            life: 'Word not found!'
-          },
-          'invalid_doc.json':
-          {
-            an: 'Word not found!',
-            ring: 'Word not found!',
-            a: 'Word not found!',
-            life: 'Word not found!'
-          }
-        }
-      );
+      expect(theIndex.searchIndex(['an', 'ring', 'a'], 'life')).toEqual(searchResults[1]);
     });
 
     it('Should ensure search does not take too long', () => {

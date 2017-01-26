@@ -1,0 +1,71 @@
+[
+  {
+          "books.json":
+          {
+            "powerful": [2],
+            "dangerous": "Word not found!",
+            "young": [3],
+            "spy": "Word not found!",
+            "wizard": [2],
+            "elf": [2]
+          },
+          "books_2.json":
+          {
+            "powerful": [1],
+            "dangerous": [2],
+            "young": [1],
+            "spy": [2],
+            "wizard": [1],
+            "elf": "Word not found!"
+          },
+          "empty_doc.json":
+          {
+            "powerful": "Word not found!",
+            "dangerous": "Word not found!",
+            "young": "Word not found!",
+            "spy": "Word not found!",
+            "wizard": "Word not found!",
+            "elf": "Word not found!"
+          },
+          "invalid_doc.json":
+          {
+            "powerful": "Word not found!",
+            "dangerous": "Word not found!",
+            "young": "Word not found!",
+            "spy": "Word not found!",
+            "wizard": "Word not found!",
+            "elf": "Word not found!"
+          }
+        },
+
+        {
+          "books.json":
+          {
+            "an": [2, 4],
+            "ring": [2],
+            "a": [1, 2, 3],
+            "life": "Word not found!"
+          },
+          "books_2.json":
+          {
+            "an": "Word not found!",
+            "ring": "Word not found!",
+            "a": [1, 2],
+            "life": "Word not found!"
+          },
+          "empty_doc.json":
+          {
+            "an": "Word not found!",
+            "ring": "Word not found!",
+            "a": "Word not found!",
+            "life": "Word not found!"
+          },
+          "invalid_doc.json":
+          {
+            "an": "Word not found!",
+            "ring": "Word not found!",
+            "a": "Word not found!",
+            "life": "Word not found!"
+          }
+        }
+]
