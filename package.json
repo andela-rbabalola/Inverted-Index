@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "dotenv": "^4.0.0",
+    "express": "^4.14.0",
     "gulp-babel": "^6.1.2",
     "gulp-cli": "^1.2.2"
   }
