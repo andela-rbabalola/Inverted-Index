@@ -87,6 +87,7 @@
           $scope.indexExists = true;
           $scope.hideSuccess = false;
           $scope.createdIndexes = invIndex.getIndex();
+          $scope.multipleSearchTable = false;
         }
       } else {
         $scope.indexExists = false;
