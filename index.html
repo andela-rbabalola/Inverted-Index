@@ -35,10 +35,8 @@
         <ul class="list-group">
           <li class="list-group-item">Choose the .json file that contains the documents you want to search</li>
           <li class="list-group-item">Click the upload file button</li>
-          <li class="list-group-item">Click the create index button to create
-          an index for the document</li>
-          <li class="list-group-item">Use the search index button to search the inverted
-          index for the document</li>
+          <li class="list-group-item">Click the create index button to create an index for the document and use the dropdown menu to view the created index</li>
+          <li class="list-group-item">Use the search index button to search the inverted index for the document, separate your search query with commas</li>
         </ul>
         <label>Select file</label>
         <input type="file" file-model="myFile" id = "myFileField" accept=".json">
@@ -112,7 +110,6 @@
             </table>
 
             <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable" ng-repeat="file in allFiles">
-              <p ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable" ng-repeat="file in allFiles">Search Results in all files</p>
               <thead>
                 <tr>
                   <th>Search Query</th>
