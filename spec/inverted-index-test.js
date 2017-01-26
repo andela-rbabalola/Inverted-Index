@@ -129,7 +129,6 @@ describe('Test suite for Inverted Index', () => {
     });
 
     it('Should return correct results when filename is not specified', () => {
-      console.log(allSearchTerms);
       expect(theIndex.searchIndex(allSearchTerms)).toEqual(searchResults[0]);
     });
 
