@@ -80,8 +80,9 @@ class InvertedIndex {
       });
       // Sort the index keys
       index = InvertedIndex.sortObjectKeys(index);
-      // Simply update the this.indexes object
-      // Don't return it yet
+      /** Simply update the this.indexes object
+       * Don't return it yet
+       */
       this.indexes[filename] = index;
     }
   }
@@ -148,9 +149,11 @@ class InvertedIndex {
   searchIndex(...args) {
     let searchResults = {};
 
-    // This neat trick allows us to 'flatten' an array
-    // ...args is an array that contains multiple arguments
-    // Convert allArgs to lower case
+   /**
+    * This neat trick allows us to 'flatten' an array
+    * ...args is an array that contains multiple arguments
+    * Convert allArgs to lower case /
+    */
     let allArgs = args.toString().toLowerCase();
 
     allArgs = allArgs.split(',');
@@ -165,7 +168,6 @@ class InvertedIndex {
       return ('Index for file not found!');
     } else {
       // Search for the file
-      // Index for the retrieved file
       // Get the filename
       const nameOfFile = allArgs[0];
       // remove the first element from the allArgs array since its the filename
