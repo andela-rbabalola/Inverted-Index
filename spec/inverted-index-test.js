@@ -2,9 +2,12 @@ const docs = require('./books');
 const secondDoc = require('./books_2');
 const emptyDoc = require('./empty.json');
 const invalidDoc = require('./invalid.json');
-// This is a JSON file that already contains search results
-// I exported it to make this test suite cleaner
+/**
+ * This is a JSON file that already contains search results
+ * I exported it to make this test suite cleaner
+ */
 const searchResults = require('./searchResults.json');
+
 // A test suite to read data from books
 describe('Test suite for Inverted Index', () => {
   // create an object of the Inverted Index class
@@ -19,7 +22,7 @@ describe('Test suite for Inverted Index', () => {
   theIndex.createIndex('empty_doc.json', emptyDoc);
   theIndex.createIndex('invalid_doc.json', invalidDoc);
 
-  /*
+  /**
   * Object that stores all the indexes created for every file
   * It ensures that a new index does not overwrite the current index
   * key -> String that is the name of the file
@@ -27,14 +30,13 @@ describe('Test suite for Inverted Index', () => {
   */
   const allIndexes = theIndex.getIndex();
 
-  // Create an Inverted Index for the file
-  theIndex.getIndex(docs);
+  // Clean and tokenize sentence
+  const tokens = InvertedIndex.clean(sentence);
+
 
   describe('Inverted Index Class', () => {
     it('Should be an instance of a class', () => {
       expect(theIndex instanceof InvertedIndex).toBe(true);
-      expect(theIndex instanceof Object).toBe(true);
-      expect(typeof theIndex).toBe('object');
     });
   });
 
@@ -44,7 +46,10 @@ describe('Test suite for Inverted Index', () => {
     });
 
     it('Should not contain non-alphanumeric characters', () => {
-      expect(InvertedIndex.clean(sentence)).not.toContain(/[#@^&]/g);
+      // Loop over tokens
+      tokens.forEach((token) => {
+        expect(token).toMatch(/[a-z0-9]/gi);
+      });
     });
 
     it('Should have the correct number of words', () => {
@@ -69,17 +74,17 @@ describe('Test suite for Inverted Index', () => {
 
   describe('Read book data', () => {
     it('Should confirm that an empty JSON file is empty', () => {
-      const emptyIndex = allIndexes['empty_doc.json'];
+      const emptyIndex = theIndex.getIndex('empty_doc.json');
       expect(emptyIndex).toBe('JSON file is empty');
     });
 
     it('Should confirm that an invalid JSON file is invalid', () => {
-      const invalidIndex = allIndexes['invalid_doc.json'];
+      const invalidIndex = theIndex.getIndex('invalid_doc.json');
       expect(invalidIndex).toBe('JSON file is invalid');
     });
 
     it('Should confirm that a non-empty file is not empty', () => {
-      expect(theIndex.getIndex(docs)).not.toBe('JSON file is empty');
+      expect(theIndex.getIndex('books.json')).not.toBe('JSON file is empty');
     });
 
     it('Should have the getIndex method defined', () => {
@@ -90,12 +95,12 @@ describe('Test suite for Inverted Index', () => {
   describe('Populate Index', () => {
     it('Should verify Index is created', () => {
       // This verifies that an entry for a word is created
-      expect(allIndexes['books.json'].alice).toBeDefined();
+      expect(theIndex.getIndex('books.json').alice).toBeDefined();
     });
 
     it('Should map words to correct docs', () => {
-      expect(allIndexes['books.json'].alice).toEqual([1]);
-      expect(allIndexes['books.json'].a).toEqual([1, 2, 3]);
+      expect(theIndex.getIndex('books.json').alice).toEqual([1]);
+      expect(theIndex.getIndex('books.json').a).toEqual([1, 2, 3]);
     });
 
     // Should ensure a new index is not overwritten
@@ -139,8 +144,7 @@ describe('Test suite for Inverted Index', () => {
     it('Should ensure search does not take too long', () => {
       // We set a threshold of 5 milliseconds
       start = new Date();
-      // Search
-      // Here we don't specify a file we search all files
+      // We don't specify a file we search all files
       theIndex.searchIndex(['an', 'ring', 'a'], 'life');
       end = new Date();
       expect(end.getTime() - start.getTime()).toBeLessThan(5);

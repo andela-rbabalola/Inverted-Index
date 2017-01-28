@@ -112,6 +112,9 @@
             <table class="table table-bordered" ng-if="uploadSuccess && indexExists && validSearch && multipleSearchTable" ng-repeat="file in allFiles">
               <thead>
                 <tr>
+                  <th colspan="100%">Search results for {{file}}</th>
+                </tr>
+                <tr>
                   <th>Search Query</th>
                   <th ng-repeat="doc in docs[file]">{{doc}}</th>
                 </tr>
