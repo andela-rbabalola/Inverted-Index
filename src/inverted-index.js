@@ -81,7 +81,7 @@ class InvertedIndex {
       // Sort the index keys
       index = InvertedIndex.sortObjectKeys(index);
       /** Simply update the this.indexes object
-       * Don't return it yet
+       *  Don't return it yet
        */
       this.indexes[filename] = index;
     }
@@ -128,7 +128,7 @@ class InvertedIndex {
           }
           /**
            * Because we loop over filenames we have remove the filename keys
-           * from the results object which will an empty object as the value
+           * from the results object which have an empty object as their value
            */
           delete results[file];
         }

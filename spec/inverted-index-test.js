@@ -120,12 +120,10 @@ describe('Test suite for Inverted Index', () => {
     });
 
     it('Should return the correct results', () => {
-      console.log(theIndex.searchIndex('books.json', 'an'));
       expect(theIndex.searchIndex('books.json', 'an')).toEqual({ an: [2, 4] });
     });
 
     it('Should return correct results for searching all documents', () => {
-      console.log(theIndex.searchIndex('books.json', multSearchTerms));
       expect(theIndex.searchIndex('books.json', multSearchTerms)).toEqual({
         an: [2, 4],
         alice: [1],
