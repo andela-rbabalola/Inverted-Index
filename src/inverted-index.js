@@ -94,10 +94,7 @@ class InvertedIndex {
    * @returns{Object} - Object that contains all the index
    */
   getIndex(filename) {
-    if (filename === undefined) {
-      return this.indexes;
-    }
-    return this.indexes[filename];
+    return (filename === undefined) ? this.indexes : this.indexes[filename];
   }
 
   /**
@@ -112,26 +109,28 @@ class InvertedIndex {
     // Object to store search results
     const results = {};
     // check if fileName is undefined
-    if (fileName === undefined) {
-      // search all indexes
-      for (const file in indexes) {
-        results[file] = {};
-        words.forEach((word) => {
+    for (const file in indexes) {
+      results[file] = {};
+      words.forEach((word) => {
+        if (fileName === undefined) {
+          // search all indexes and update
           if (Object.keys(indexes[file]).includes(word)) {
             results[file][word] = indexes[file][word];
           } else {
             results[file][word] = 'Word not found!';
           }
-        });
-      }
-    } else {
-      // get the index for the file specified
-      const fileIndex = indexes[fileName];
-      words.forEach((word) => {
-        if (Object.keys(fileIndex).includes(word)) {
-          results[word] = fileIndex[word];
         } else {
-          results[word] = 'Word not found!';
+          const fileIndex = indexes[fileName];
+          if (Object.keys(fileIndex).includes(word)) {
+            results[word] = fileIndex[word];
+          } else {
+            results[word] = 'Word not found!';
+          }
+          /**
+           * Because we loop over filenames we have remove the filename keys
+           * from the results object which will an empty object as the value
+           */
+          delete results[file];
         }
       });
     }
@@ -149,11 +148,11 @@ class InvertedIndex {
   searchIndex(...args) {
     let searchResults = {};
 
-   /**
-    * This neat trick allows us to 'flatten' an array
-    * ...args is an array that contains multiple arguments
-    * Convert allArgs to lower case /
-    */
+    /**
+     * This neat trick allows us to 'flatten' an array
+     * ...args is an array that contains multiple arguments
+     * Convert allArgs to lower case /
+     */
     let allArgs = args.toString().toLowerCase();
 
     allArgs = allArgs.split(',');
