@@ -75,16 +75,16 @@ describe('Test suite for Inverted Index', () => {
   describe('Read book data', () => {
     it('Should confirm that an empty JSON file is empty', () => {
       const emptyIndex = theIndex.getIndex('empty_doc.json');
-      expect(emptyIndex).toBe('JSON file is empty');
+      expect(emptyIndex).toEqual(['JSON file is empty']);
     });
 
     it('Should confirm that an invalid JSON file is invalid', () => {
       const invalidIndex = theIndex.getIndex('invalid_doc.json');
-      expect(invalidIndex).toBe('JSON file is invalid');
+      expect(invalidIndex).toEqual(['JSON file is invalid']);
     });
 
     it('Should confirm that a non-empty file is not empty', () => {
-      expect(theIndex.getIndex('books.json')).not.toBe('JSON file is empty');
+      expect(theIndex.getIndex('books.json')).not.toBe(['JSON file is empty']);
     });
 
     it('Should have the getIndex method defined', () => {
