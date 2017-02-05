@@ -91,8 +91,8 @@ class InvertedIndex {
     } else if (InvertedIndex.validateFile(fileToIndex) === 'Invalid file') {
       this.indexes[filename] = ['JSON file is invalid'];
     } else {
-      fileToIndex.forEach((file, docIndex) => {
-        const cleanWords = InvertedIndex.clean(`${file.title} ${file.text}`);
+      fileToIndex.forEach((doc, docIndex) => {
+        const cleanWords = InvertedIndex.clean(`${doc.title} ${doc.text}`);
         const uniqueWords = InvertedIndex.removeDuplicates(cleanWords);
         uniqueWords.forEach((word) => {
           /**
