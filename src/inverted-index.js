@@ -144,6 +144,7 @@ class InvertedIndex {
    * @returns{Object} - The results of the search
    */
   searchIndex(...args) {
+    // This regex allows us to split on both whitespace and commas
     const allArgs = args.toString().toLowerCase().split(/[\s,]+/);
     const searchResults = {};
     let filesToSearch;
