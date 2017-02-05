@@ -157,7 +157,7 @@ class InvertedIndex {
 
     if (allArgs[0].slice(-5) === '.json') {
       /**
-       * Assign filesToSearch to the first element of allArgs if it is a
+       * Assign first element of allArgs array to the filesToSearch variable if it is a
        * filename
        */
       filesToSearch = Array(allArgs[0]);
