@@ -78,24 +78,28 @@ class InvertedIndex {
    * Creates the Inverted Index data structure
    *
    * @param{String} filename - Name of the file for which index is to be created
-   * @param{Object} docToIndex - JSON file
+   * @param{Object} fileToIndex - JSON file
    * @returns{undefined} - This function does not return anything it just
    * updates the this.indexes Object
    */
-  createIndex(filename, docToIndex) {
+  createIndex(filename, fileToIndex) {
     // This object stores the index of the current document
     let index = {};
     // Ensure JSON file is not empty or invalid
-    if (InvertedIndex.validateFile(docToIndex) === 'Empty file') {
+    if (InvertedIndex.validateFile(fileToIndex) === 'Empty file') {
       this.indexes[filename] = ['JSON file is empty'];
-    } else if (InvertedIndex.validateFile(docToIndex) === 'Invalid file') {
+    } else if (InvertedIndex.validateFile(fileToIndex) === 'Invalid file') {
       this.indexes[filename] = ['JSON file is invalid'];
     } else {
-      docToIndex.forEach((document, docIndex) => {
-        const cleanWords = InvertedIndex.clean(`${document.title} ${document.text}`);
+      fileToIndex.forEach((file, docIndex) => {
+        const cleanWords = InvertedIndex.clean(`${file.title} ${file.text}`);
         const uniqueWords = InvertedIndex.removeDuplicates(cleanWords);
         uniqueWords.forEach((word) => {
-          if (Object.keys(index).indexOf(word) === -1) {
+          /**
+           * If word does not exist as a key in the index object, first create
+           * an empty array value for it
+           */
+          if (!Object.keys(index).includes(word)) {
             index[word] = [];
           }
           index[word].push(docIndex + 1);
@@ -103,7 +107,8 @@ class InvertedIndex {
       });
       // Sort the index keys
       index = InvertedIndex.sortObjectKeys(index);
-      /** Simply update the this.indexes object
+      /**
+       * Simply update the this.indexes object
        * Don't return it yet
        */
       this.indexes[filename] = index;
@@ -114,7 +119,7 @@ class InvertedIndex {
    * Returns all indexes or an index for a specified file
    *
    * @param{String} filename - Optional parameter specifying a file whose index is required
-   * @returns{Object} - Object that contains all the index
+   * @returns{Object} - Object that contains all indexes or a required index
    */
   getIndex(filename) {
     return (filename === undefined) ? this.indexes : this.indexes[filename];
@@ -139,7 +144,7 @@ class InvertedIndex {
    * @returns{Object} - The results of the search
    */
   searchIndex(...args) {
-    const allArgs = args.toString().toLowerCase().split(',');
+    const allArgs = args.toString().toLowerCase().split(/[\s,]+/);
     const searchResults = {};
     let filesToSearch;
 
@@ -154,7 +159,7 @@ class InvertedIndex {
        * Assign filesToSearch to the first element of allArgs if it is a
        * filename
        */
-      filesToSearch = Array(args[0]);
+      filesToSearch = Array(allArgs[0]);
       // Remove the filename because we don't want to search for it
       query.shift();
       // check that index for the file exists before search
