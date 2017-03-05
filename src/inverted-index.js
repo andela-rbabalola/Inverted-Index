@@ -10,19 +10,24 @@ class InvertedIndex {
     // Object to store all indexes created
     this.indexes = {};
   }
+
   /**
+   * Removes non alphanumeric chracters from a string and tokenizes it
+   *
    * @param {String} text - Words to get tokens from
    * @return {Array}  An array of sorted strings without non-alphanumeric symbols
    */
   static clean(text) {
     return text.replace(/[^a-z0-9\s]+/gi, '')
-             .replace(/\s{2,}/g, ' ')
-             .toLowerCase()
-             .split(' ')
-             .sort();
+      .replace(/\s{2,}/g, ' ')
+      .toLowerCase()
+      .split(' ')
+      .sort();
   }
 
   /**
+   * Removes duplicate strings from an array of strings
+   *
    * @param {Array} words - An array of strings
    * @return {Array} uniqueWords - An array non-duplicate strings
    */
@@ -31,6 +36,8 @@ class InvertedIndex {
   }
 
   /**
+   * Sorts the keys of an Object
+   *
    * @param {Object} index - Efizi function to sort an Object
    * @return {Object} sortedObject - Object with keys sorted
    */
@@ -45,26 +52,54 @@ class InvertedIndex {
   }
 
   /**
+   * Checks if a file is empty or invalid
+   *
+   * @param {Object} file - JSON object from which index is to be created
+   * @returns{string}  A string describing the file's status
+   */
+  static validateFile(file) {
+    if (file.length === 0) {
+      return 'Empty file';
+    }
+    // get keys of all objects in JSON file
+    let keys = [];
+    file.forEach((doc) => {
+      keys.push(Object.keys(doc));
+    });
+    // 'flatten' it to an array`
+    keys = keys.toString().split(',');
+    if (keys.includes('title') || keys.includes('text')) {
+      return 'Valid file';
+    }
+    return 'Invalid file';
+  }
+
+  /**
+   * Creates the Inverted Index data structure
+   *
    * @param{String} filename - Name of the file for which index is to be created
-   * @param{Object} docToIndex - JSON file
+   * @param{Object} fileToIndex - JSON file
    * @returns{undefined} - This function does not return anything it just
    * updates the this.indexes Object
    */
-  createIndex(filename, docToIndex) {
+  createIndex(filename, fileToIndex) {
     // This object stores the index of the current document
     let index = {};
     // Ensure JSON file is not empty or invalid
-    if (docToIndex.length === 0) {
-      this.indexes[filename] = 'JSON file is empty';
-    } else if (!docToIndex[0].title && !docToIndex[0].text) {
-      this.indexes[filename] = 'JSON file is invalid';
+    if (InvertedIndex.validateFile(fileToIndex) === 'Empty file') {
+      this.indexes[filename] = ['JSON file is empty'];
+    } else if (InvertedIndex.validateFile(fileToIndex) === 'Invalid file') {
+      this.indexes[filename] = ['JSON file is invalid'];
     } else {
-      docToIndex.forEach((document, docIndex) => {
-        const cleanWords = InvertedIndex.clean(document.text);
+      fileToIndex.forEach((doc, docIndex) => {
+        const cleanWords = InvertedIndex.clean(`${doc.title} ${doc.text}`);
         const uniqueWords = InvertedIndex.removeDuplicates(cleanWords);
-
         uniqueWords.forEach((word) => {
-          if (Object.keys(index).indexOf(word) === -1) {
+          /**
+           * If word does not exist as a key in the index object, first create
+           * an empty array value for it
+           */
+          if (!Object.keys(index).includes(word)) {
             index[word] = [];
           }
           index[word].push(docIndex + 1);
@@ -72,76 +107,80 @@ class InvertedIndex {
       });
       // Sort the index keys
       index = InvertedIndex.sortObjectKeys(index);
-      // Simply update the this.indexes object
-      // Don't return it yet
+      /**
+       * Simply update the this.indexes object
+       * Don't return it yet
+       */
       this.indexes[filename] = index;
     }
   }
 
   /**
-   * @returns{Object} - Object that contains all the index
+   * Returns all indexes or an index for a specified file
+   *
+   * @param{String} filename - Optional parameter specifying a file whose index is required
+   * @returns{Object} - Object that contains all indexes or a required index
    */
-  getIndex() {
-    return this.indexes;
+  getIndex(filename) {
+    return (filename === undefined) ? this.indexes : this.indexes[filename];
   }
 
   /**
+   * Checks that index for file exists before search
+   *
+   * @param{String} file - Name of file which we want to search
+   * @returns{Boolean} - A boolean indicating whether or not index for that file exists
+   */
+  indexExists(file) {
+    return (Object.keys(this.getIndex()).includes(file));
+  }
+
+  /**
+   * Searches all the indexes created or a particular index
+   *
    * @param{Array} args - This is an array that can contain an infinite
    * number of arguments. The first element of this array maybe a filename,
    * if it is not all files are searched
-   * @returns{undefined}
+   * @returns{Object} - The results of the search
    */
   searchIndex(...args) {
+    // This regex allows us to split on both whitespace and commas
+    const allArgs = args.toString().toLowerCase().split(/[\s,]+/);
     const searchResults = {};
+    let filesToSearch;
 
-    // This neat trick allows us to 'flatten' an array
-    // ...args is an array that contains multiple arguments
-    // Convert allArgs to lower case
-    let allArgs = args.toString().toLowerCase();
+    /**
+     * Query is an array that contains the terms we want to search for
+     * It is simply a copy of the allArgs array
+     */
+    const query = allArgs.slice();
 
-    allArgs = allArgs.split(',');
-
-    // Get all the created indexes
-    const allIndexes = this.getIndex();
-
-    // Check if the first element of array is not a .json file
-    if (args[0].slice(-5) !== '.json') {
-      // Search all indexes
-      for (const fileName in allIndexes) {
-        // Loop over the words
-        searchResults[fileName] = {};
-        allArgs.forEach((word) => {
-          // If word is in that index
-          if (Object.keys(allIndexes[fileName]).indexOf(word) > -1) {
-            searchResults[fileName][word] = allIndexes[fileName][word];
-          } else {
-            searchResults[fileName][word] = 'Word not found!';
-          }
-        });
+    if (allArgs[0].slice(-5) === '.json') {
+      /**
+       * Assign first element of allArgs array to the filesToSearch variable if it is a
+       * filename
+       */
+      filesToSearch = Array(allArgs[0]);
+      // Remove the filename because we don't want to search for it
+      query.shift();
+      // check that index for the file exists before search
+      if (!this.indexExists(allArgs[0])) {
+        return ('Index for file does not exist');
       }
-      // If a filename is specified
-      // Index the document by the filename
-      // Check if the document exists first
-      // Note that I use allArgs[0] because I assume the filename is the first argument
-    } else if (Object.keys(allIndexes).indexOf(allArgs[0]) === -1) {
-      return ('Index for file not found!');
     } else {
-      // Search for the file
-      // Index for the retrieved file
-      const fileIndex = allIndexes[allArgs[0]];
+      filesToSearch = Object.keys(this.getIndex());
+    }
 
-      // Remove the first element of the array
-      // Because it is the file name is specified and
-      // We don't want to search for it :)
-      allArgs.shift();
-      allArgs.forEach((word) => {
-        if (Object.keys(fileIndex).indexOf(word) > -1) {
-          searchResults[word] = fileIndex[word];
+    filesToSearch.forEach((file) => {
+      searchResults[file] = {};
+      query.forEach((term) => {
+        if (term in this.getIndex(file)) {
+          searchResults[file][term] = this.getIndex(file)[term];
         } else {
-          searchResults[word] = 'Word not found!';
+          searchResults[file][term] = 'Word not found!';
         }
       });
-    }
-    return (searchResults);
+    });
+    return (allArgs[0].slice(-5) === '.json') ? searchResults[allArgs[0]] : searchResults;
   }
 }
